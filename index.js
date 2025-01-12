@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
+const jwt = require('jsonwebtoken');
 const app = express()
 const port=process.env.Port || 5000
 
@@ -27,6 +28,11 @@ async function run() {
     const userCollection=client.db("FoodDelivery").collection('users')
     const loginUserCollection=client.db("FoodDelivery").collection('loginUsers')
 
+app.post('/jwt',async (req,res) =>{
+  const password=req.body
+  const token=jwt.sign(password,process.env.Token_secret,{ expiresIn: '1h' } )
+  res.send({token})
+})    
 
 app.post('/loginUsers',async(req,res)=>{
   const loginUser=req.body
@@ -40,8 +46,6 @@ app.post('/loginUsers',async(req,res)=>{
   const loginUserData=await loginUserCollection.insertOne(loginUser)
   res.send("Login successfully")
 })
-
-
 
 app.post('/users',async(req,res)=>{
   const user=req.body
