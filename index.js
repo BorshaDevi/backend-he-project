@@ -24,6 +24,44 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    const userCollection=client.db("FoodDelivery").collection('users')
+    const loginUserCollection=client.db("FoodDelivery").collection('loginUsers')
+
+
+app.post('/loginUsers',async(req,res)=>{
+  const loginUser=req.body
+  const name=loginUser.name
+  const password=loginUser.password
+  const query={name:name , password :password}
+  const searchIngUser=await userCollection.findOne(query)
+  if(!searchIngUser){
+    return res.send("Unauthorize")
+  }
+  const loginUserData=await loginUserCollection.insertOne(loginUser)
+  res.send("Login successfully")
+})
+
+
+
+app.post('/users',async(req,res)=>{
+  const user=req.body
+  const email=user.email
+  const query={email : email}
+  const userEmail=await userCollection.findOne(query)
+  if(userEmail){
+       return res.send("Already register")
+  }
+  const userData=await userCollection.insertOne(user)
+  res.send("New user create")
+})
+
+
+
+
+
+
+
+
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Send a ping to confirm a successful connection
