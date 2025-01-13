@@ -28,6 +28,10 @@ async function run() {
   try {
     const userCollection=client.db("FoodDelivery").collection('users')
     const loginUserCollection=client.db("FoodDelivery").collection('loginUsers')
+// app.get('/userLogin',async(req,res) =>{
+//   const userData=req.body
+//   const result=await loginUserCollection.find()
+// })
 
 app.post('/jwt',async (req,res) =>{
   const password=req.body
