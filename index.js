@@ -7,9 +7,12 @@ const app = express()
 const port=process.env.Port || 5000
 
 
-app.use(cors())
+const data={
+  origin: [ 'http://localhost:5173' ,'https://he-frontend-project-esxvnigek-borshadevis-projects.vercel.app'],
+  credentials: true, 
+}
+app.use(cors(data))
 app.use(express.json())
-
 
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
