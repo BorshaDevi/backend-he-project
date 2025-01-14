@@ -46,10 +46,10 @@ app.post('/loginUsers',async(req,res)=>{
   const password=loginUser.password
   const query={ name :name}
   const searchIngUser=await userCollection.findOne(query)
-  console.log(searchIngUser.password ,"hash password")
+  // console.log(searchIngUser.password ,"hash password")
   const userCollectionPassword=bcrypt.compareSync(password, searchIngUser.password)
   // console.log(userCollectionPassword)
-  if(!searchIngUser){
+  if(!userCollectionPassword){
     return res.send("Unauthorize")
   }
   const hashPassword= bcrypt.hashSync(password ,10)
