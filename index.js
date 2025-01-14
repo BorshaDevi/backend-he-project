@@ -12,7 +12,7 @@ app.use(express.json())
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = process.env.mongoDb_uri;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -33,6 +33,13 @@ async function run() {
 //   const userData=req.body
 //   const result=await loginUserCollection.find()
 // })
+app.get('/idMenu/:id',async(req,res)=>{
+  const Id=req.params.id
+  const query={_id : new ObjectId(Id)}
+  const result=await menuCollection.findOne(query)
+  // console.log(result)
+  res.send(result)
+})
 app.get('/allMenu',async(req,res)=>{
   const result=await menuCollection.find().toArray()
   res.send(result)
@@ -89,8 +96,33 @@ app.post('/users',async(req,res)=>{
   }
   const userData=await userCollection.insertOne(userAllData)
   res.send("New user create")
+
+})
+app.delete('/deleteMenu/:id',async(req,res)=>{
+  const Id=req.params.id
+  const query={_id:new ObjectId(Id)}
+  const result=await menuCollection.deleteOne(query)
+  res.send(result)
 })
 
+app.put('/updateMenu/:id',async(req,res) =>{
+  const value=req.body
+  const Id=req.params.id
+  const filter={_id : new ObjectId(Id)}
+  const updateDocs={
+    $set:{
+      menuName:value.menuName,
+      price:value.price,
+      category:value.category,
+      availability:value.availability,
+
+    }
+  }
+  const result=await menuCollection.updateMany(filter , updateDocs)
+  res.send(result)
+
+  
+})
 
 
 
