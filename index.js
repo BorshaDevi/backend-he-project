@@ -28,16 +28,28 @@ async function run() {
   try {
     const userCollection=client.db("FoodDelivery").collection('users')
     const loginUserCollection=client.db("FoodDelivery").collection('loginUsers')
+    const menuCollection=client.db("FoodDelivery").collection('menu')
 // app.get('/userLogin',async(req,res) =>{
 //   const userData=req.body
 //   const result=await loginUserCollection.find()
 // })
-
+app.get('/allMenu',async(req,res)=>{
+  const result=await menuCollection.find().toArray()
+  res.send(result)
+})
 app.post('/jwt',async (req,res) =>{
   const password=req.body
   const token=jwt.sign(password,process.env.Token_secret,{ expiresIn: '1h' } )
   res.send({token})
 })    
+
+
+app.post('/addMenu',async(req,res)=>{
+  const menu=req.body
+  const result=await menuCollection.insertOne(menu)
+  res.send(result)
+
+})
 
 app.post('/loginUsers',async(req,res)=>{
   const loginUser=req.body
